@@ -18,6 +18,25 @@ public class UsrMemberController {
 	@Autowired
 	private MemberService memberService;
 
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public ResultData doLogin(HttpSession session) {
+
+		boolean isLogined = false;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (!isLogined) {
+			return ResultData.from("F-A", "이미 로그아웃 함");
+		}
+
+		session.removeAttribute("loginedMemberId");
+
+		return ResultData.from("S-1", Ut.f("로그아웃 되었습니다"));
+	}
+
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public ResultData<Member> doLogin(HttpSession session, String loginId, String loginPw) {
@@ -51,13 +70,23 @@ public class UsrMemberController {
 
 		session.setAttribute("loginedMemberId", member.getId());
 
-		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()));
+		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "로그인 한 회원", member);
 	}
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+	public ResultData<Member> doJoin(HttpSession session, String loginId, String loginPw, String name, String nickname,
+			String cellphoneNum, String email) {
+
+		boolean isLogined = false;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (isLogined) {
+			return ResultData.from("F-A", "이미 로그인 함");
+		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
 			return ResultData.from("F-1", "아이디를 입력해");
@@ -91,7 +120,7 @@ public class UsrMemberController {
 
 		Member member = memberService.getMemberById((int) doJoinRd.getData1());
 
-		return ResultData.newData(doJoinRd, member);
+		return ResultData.newData(doJoinRd, "새로 생성된 memebr", member);
 	}
 
 }
