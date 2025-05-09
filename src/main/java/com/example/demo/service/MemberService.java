@@ -18,7 +18,7 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	public ResultData doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Integer> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
 
 		Member existsMember = getMemberByLoginId(loginId);
@@ -45,7 +45,7 @@ public class MemberService {
 
 	}
 
-	private Member getMemberByLoginId(String loginId) {
+	public Member getMemberByLoginId(String loginId) {
 		return memberRepository.getMemberByLoginId(loginId);
 	}
 
