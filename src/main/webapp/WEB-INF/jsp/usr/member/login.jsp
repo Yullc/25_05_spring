@@ -1,57 +1,45 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<h2>로그인</h2>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-	<a href="../home/main">메인으로 이동</a>
-
-	<script type="text/javascript">
-		function LoginForm__submit(form) {
-		
-			let loginId = form.loginId.value.trim();
-			let loginPw = form.loginPw.value.trim();
+<c:set var="pageTitle" value="MEMBER LOGIN"></c:set>
+<%@ include file="../common/head.jspf"%>
 
 
-			if (loginId.length == 0) {
-				alert('아이디 써');
-				form.loginId.focus();
-				return;
-			}
-			if (loginPw.length == 0) {
-				alert('비번 써');
-				form.loginPw.focus();
-				return;
-			}
+<section class="mt-8 text-xl px-4">
+	<div class="mx-auto">
+		<form action="../member/doLogin" method="POST">
+			<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+					<tr>
+						<th>아이디</th>
+						<td style="text-align: center;">
+							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호</th>
+						<td style="text-align: center;">
+							<input name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+						</td>
+					</tr>
 
-			form.submit();
+					<tr>
+						<th></th>
+						<td style="text-align: center;">
+							<input value="로그인" type="submit" />
+						</td>
+					</tr>
 
-		}
-	</script>
+				</tbody>
+			</table>
+		</form>
+		<div class="btns">
+			<button type="button" onclick="history.back();">뒤로가기</button>
 
-
-	<form onsubmit="LoginForm__submit(this); return false;" action="doLogin"
-		method="POST">
-		<div>
-			아이디 : <input autocomplete="off" type="text" placeholder="아이디 입력"
-				name="loginId" />
 		</div>
-		<div>
-			비밀번호 : <input autocomplete="off" type="text" placeholder="비밀번호 입력"
-				name="loginPw" />
-		</div>
-
-		<button type="submit">로그인</button>
-	</form>
+	</div>
+</section>
 
 
 
-
-
-</body>
-</html>
+<%@ include file="../common/foot.jspf"%>
