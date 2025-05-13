@@ -1,35 +1,64 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
+<c:set var="pageTitle" value="ARTICLE MODIFY"></c:set>
 <%@ include file="../common/head.jspf"%>
 
 
-<body>
-	<h2>${article.id}번 글 수정
-	</h2>
+<section class=2"mt-8 text-xl px-4">
+	<div class="mx-auto">
+		<form action="../article/doModify" method="POST">
+			<input type="hidden" name="id" value="${article.id}" />
+			<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+					<tr>
+						<th style="text-align: center;">ID</th>
+						<td style="text-align: center;">${article.id}</td>
+					</tr>
+					<tr>
+						<th style="text-align: center;">Registration Date</th>
+						<td style="text-align: center;">${article.regDate}</td>
+					</tr>
+					<tr>
+						<th style="text-align: center;">Update Date</th>
+						<td style="text-align: center;">${article.updateDate}</td>
+					</tr>
+					<tr>
+						<th style="text-align: center;">Writer</th>
+						<td style="text-align: center;">${article.extra__writer }</td>
+					</tr>
+					<tr>
+						<th style="text-align: center;">Title</th>
+						<td style="text-align: center;">
+							<input required="required" name="title" value="${article.title }" type="text" autocomplete="off" placeholder="새 제목" />
+						</td>
+					</tr>
+					<tr>
+						<th style="text-align: center;">Body</th>
+						<td style="text-align: center;">
+							<input required="required" name="body" value="${article.body }" type="text" autocomplete="off" placeholder="새 내용" />
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td style="text-align: center;">
+							<input type="submit" value="수정" />
+						</td>
+					</tr>
 
-	<a href="../home/main">메인으로 이동</a>
-
-	<form action="doModify" method="POST">
-		<input type="hidden" value="${article.id}" name="id" />
-		<div>
-			번호 :
-			${article.id}</div>
-
-		<div>
-			날짜 :
-			${article.reDate}</div>
-		<div>
-			새 제목 : <input type="text" placeholder="제목 입력" name="title" />
+				</tbody>
+			</table>
+		</form>
+		<div class="btns">
+			<button type="button" onclick="history.back();">뒤로가기</button>
+			<c:if test="${article.userCanDelete }">
+				<a href="../article/doDelete?id=${article.id}">삭제</a>
+			</c:if>
 		</div>
-		<div>
-			새 내용 :
-			<textarea type="text" placeholder="내용 입력" name="body"></textarea>
-		</div>
-		<button type="submit">수정</button>
-	</form>
-</body>
+
+	</div>
+</section>
+
 
 
 <%@ include file="../common/foot.jspf"%>
