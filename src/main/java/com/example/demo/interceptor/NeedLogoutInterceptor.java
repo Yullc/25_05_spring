@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class NeedLoginInterceptor implements HandlerInterceptor {
+public class NeedLogoutInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private Rq rq;
@@ -20,9 +20,9 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 
 //		Rq rq = (Rq) req.getAttribute("rq");
 
-		if (!rq.isLogined()) {
+		if (rq.isLogined()) {
 
-			rq.printHistoryBack("로그인 하고 사용해야함(NeedLoginInterceptor)");
+			rq.printHistoryBack("로그아웃 하고 사용해야함(NeedLogoutInterceptor)");
 
 			return false;
 		}

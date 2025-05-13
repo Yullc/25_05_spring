@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UsrArticleController {
+	
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private ArticleService articleService;
@@ -25,29 +28,22 @@ public class UsrArticleController {
 	// 로그인 체크 -> 유무 체크 -> 권한체크
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData doModify(HttpServletRequest req, int id, String title, String body) {
+	public String doModify(HttpServletRequest req, int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 게시글은 없습니다", id), "없는 글의 id", id);
+			return Ut.jsHistoryBack("F-1", Ut.f("없는 게시글이야"));
 		}
 
 		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
-		if (userCanModifyRd.isFail()) {
-			return userCanModifyRd;
-		}
-
-		if (userCanModifyRd.isSuccess()) {
-			articleService.modifyArticle(id, title, body);
-		}
 
 		article = articleService.getArticleById(id);
 
-		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정된 글", article);
+		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/modify");
 	}
 
 	@RequestMapping("/usr/article/doDelete")
@@ -89,16 +85,16 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.isEmptyOrNull(title)) {
-			return ResultData.from("F-1", "제목을 입력하세요");
+			return Ut.jsHistoryBack("F-1", Ut.f("제목을 입력하세요"));
 		}
 
 		if (Ut.isEmptyOrNull(body)) {
-			return ResultData.from("F-2", "내용을 입력하세요");
+			return Ut.jsHistoryBack("F-1", Ut.f("내용을 입력하세요"));
 		}
 
 		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
@@ -106,8 +102,10 @@ public class UsrArticleController {
 		int id = (int) doWriteRd.getData1();
 
 		Article article = articleService.getArticleById(id);
+		
+		ResultData.newData(doWriteRd, "새로 작성된 게시글", article);
 
-		return ResultData.newData(doWriteRd, "새로 작성된 게시글", article);
+		return "usr/article/list";
 	}
 
 	@RequestMapping("/usr/article/list")
