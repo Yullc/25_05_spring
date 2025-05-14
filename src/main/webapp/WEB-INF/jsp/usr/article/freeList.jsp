@@ -15,6 +15,7 @@
 					<th style="text-align: center;">Registration Date</th>
 					<th style="text-align: center;">Title</th>
 					<th style="text-align: center;">Writer</th>
+					<th style="text-align: center;">Board ID</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -26,14 +27,9 @@
 							<a class="hover:underline" href="detail?id=${article.id }">${article.title }</a>
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
+						<td style="text-align: center;">${article.boardId }</td>
 					</tr>
 				</c:forEach>
-
-				<c:if test="${empty articles }">
-					<tr>
-						<td colspan="4" style="text-align: center;">게시글이 없습니다</td>
-					</tr>
-				</c:if>
 			</tbody>
 		</table>
 	</div>
