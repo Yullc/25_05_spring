@@ -27,7 +27,7 @@ public class Ut {
 
 					if(resultMsg.length > 0){
 						alert(resultMsg);
-					}0
+					}
 
 					location.replace('%s');
 				</script>

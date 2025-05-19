@@ -8,7 +8,7 @@
 	<select id="getBoardById" parameterType="int"
 		resultType="com.example.demo.vo.Board">
 		SELECT *
-		FROM board 
+		FROM board
 		WHERE id = #{id} AND delStatus = 0
 	</select>
 
