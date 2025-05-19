@@ -175,5 +175,14 @@
 		ORDER BY A.id
 		DESC
 	</select>
+	
+	<select id="getGoodRP">SELECT goodReactionPoint
+		FROM article
+		WHERE id = #{relId}
+	</select>
+	<select id="getBadRP">SELECT badReactionPoint
+		FROM article
+		WHERE id = #{relId}
+	</select>
 
 </mapper>
