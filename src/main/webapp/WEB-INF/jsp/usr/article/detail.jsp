@@ -142,6 +142,16 @@
 
 <script>
 	function ArticleDetail__doIncreaseHitCount() {
+		
+		const localStorageKey = 'article__' + params.id + '__alreadyOnView';
+		
+		if(localStorage.getItem(localStorageKey)){
+			return;
+		}
+		
+		localStorage.setItem(localStorageKey, true);
+		
+		
 		$.get('../article/doIncreaseHitCountRd', {
 			id : params.id,
 			ajaxMode : 'Y'
@@ -227,6 +237,24 @@
 				<a class="btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
 			</c:if>
 		</div>
+
+	</div>
+	<hr />
+	<div class="p-4 rounded-xl shadow-md">
+
+		<h2 class="text-lg font-semibold mb-2">댓글</h2>
+		<form action="../article/doComment" method="POST" class="p-4 rounded-xl shadow-md space-y-3">
+			<input type="hidden" name="memberId" value="${loginedMemberId}" />
+			<input type="hidden" name="articleId" value="${article.id}" />
+
+			<div class="flex gap-2">
+				<input required name="commentBody" type="text" autocomplete="off" placeholder="댓글을 입력해주세요"
+					class="input input-bordered flex-grow" />
+				<button type="submit" class="btn btn-primary whitespace-nowrap">작성</button>
+			</div>
+		</form>
+
+
 
 	</div>
 </section>

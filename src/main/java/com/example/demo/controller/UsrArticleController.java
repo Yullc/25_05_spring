@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Comment;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -37,6 +39,9 @@ public class UsrArticleController {
 
 	@Autowired
 	private ReactionPointService reactionPointService;
+	
+	@Autowired
+	private CommentService commentService;
 
 	UsrArticleController(BeforeActionInterceptor beforeActionInterceptor) {
 		this.beforeActionInterceptor = beforeActionInterceptor;
@@ -143,7 +148,8 @@ public class UsrArticleController {
 			return increaseHitCountRd;
 		}
 
-		return ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
+		return ResultData.from(increaseHitCountRd.getResultCode(), increaseHitCountRd.getMsg(), "hitCount",
+				articleService.getArticleHitCount(id), "articleId", id);
 	}
 
 	@RequestMapping("/usr/article/write")
@@ -216,4 +222,26 @@ public class UsrArticleController {
 
 		return "usr/article/list";
 	}
+	
+	 @RequestMapping("/usr/article/doComment")
+	    @ResponseBody
+	    public String doComment(HttpServletRequest req, String commentBody) {
+		 	System.out.println("comment 실횅 됨 ");
+		 	System.out.println("comment 실횅 됨 ");
+	        Rq rq = (Rq) req.getAttribute("rq");
+
+	        if (Ut.isEmptyOrNull(commentBody)) {
+	            return Ut.jsHistoryBack("F-1", "내용 입력하세요");
+	        }
+	        
+
+	        ResultData doCommentRd = commentService.writeComment(rq.getLoginedMemberId(), commentBody);
+
+	        int id = (int) doCommentRd.getData1();
+
+	        Article articlecomment = articleService.getArticleById(id);
+
+	        return Ut.jsReplace(doCommentRd.getResultCode(), doCommentRd.getMsg(), "../article/detail?id=" + id);
+	    }
+	
 }
